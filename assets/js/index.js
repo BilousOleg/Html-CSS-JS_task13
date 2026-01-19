@@ -138,6 +138,11 @@ console.log(
     .reduce((accum, p) => (accum += p.quantity), 0),
 );
 
+// Варіант з довжиною фільтрованого масива
+// (хоча це неправильно, адже в умові вказано знайти загальний quantity -
+// тобто порахувати суму всіх значень властивості quantity, а не довжину масиву)
+console.log(products.filter((p) => p.category === 'Овочі та фрукти').length);
+
 // Завдання 2
 
 console.log(
@@ -149,37 +154,30 @@ console.log(
 // Завдання 3
 
 console.log(
-  [...products].sort((p1, p2) => (p2.quantity > p1.quantity ? 1 : -1)),
+  // Використання метода toSorted, для сортування і повернення КОПІЇ масиву
+  products.toSorted((p1, p2) => (p2.quantity > p1.quantity ? 1 : -1)),
 );
 
 // Завдання 4
 // Спрощений варіант, оскільки продуктів з однаковою ціною могло б бути декілька,
 // і довелося б робити масив об'єктів з однаковою ціною в такому випадку
 
-const mostExpensive = products.reduce((accum, p) => {
-  if (p.price > accum.price) {
-    accum = { ...p };
-  }
-  return accum;
-});
+const mostExpensive = products.reduce((accum, p) =>
+  p.price > accum.price ? (accum = { ...p }) : accum,
+);
 
-const leastExpensive = products.reduce((accum, p) => {
-  if (p.price < accum.price) {
-    accum = { ...p };
-  }
-  return accum;
-});
+const leastExpensive = products.reduce((accum, p) =>
+  p.price < accum.price ? (accum = { ...p }) : accum,
+);
 
 console.log('Найдорожчий продукт:', mostExpensive.name, mostExpensive.price);
 console.log('Найдешевший продукт:', leastExpensive.name, leastExpensive.price);
 
 // Завдання 5
 
-const meatProducts = products.filter(
-  (p) => p.category === "М'ясо та м'ясні вироби",
-);
-
 console.log(
-  meatProducts.reduce((accum, p) => (accum += p.price), 0) /
-    meatProducts.length,
+  products
+    .filter((p) => p.category === "М'ясо та м'ясні вироби")
+    .reduce((accum, p) => (accum += p.price), 0) /
+    products.filter((p) => p.category === "М'ясо та м'ясні вироби").length,
 );
